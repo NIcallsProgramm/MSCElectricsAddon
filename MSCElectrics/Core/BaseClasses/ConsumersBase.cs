@@ -4,28 +4,38 @@ namespace MSCElectrics;
 
 public abstract class ConsumersBase : IConsumers
 {
-    float Resistance{get;}
-    float NVoltage{get;}
-    protected ConsumersBase(float resistance, float nVoltage)
+    private const float MinResistance = 0.0001f;
+    
+    public string Name{get;}
+    public float Resistance{get;}
+    public float NVoltage{get;}
+    protected ConsumersBase(string name, float resistance, float nVoltage, int countTerminals)
     {
-        Resistance=resistance; NVoltage=nVoltage;
+        Name = name; Resistance = resistance; NVoltage = nVoltage;
     }
-    float I //сила тока проходящего через прибор
+    public float SVoltage{get;}
+    public float Wear
     {
         get{
-            return NVoltage/Resistance;
+            return 
         }
     }
-    float G //проводимость в См(сименсах), ещк не уверен, буду использовать или нет
+    public float I //сила тока проходящего через потребитель
+    {
+        get{
+            return SVoltage/Resistance;
+        }
+    }
+    public float G //проводимость в См(сименсах), ещк не уверен, буду использовать или нет
     {
         get{
             return 1/Resistance;
         }
     }
-    float P //мощность в watt
+    public float P //мощность в watt
     {
         get{
-            return NVoltage*I;
+            return SVoltage*I;
         }
     }
     
