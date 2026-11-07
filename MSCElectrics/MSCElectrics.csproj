@@ -8,8 +8,4 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-  <ItemGroup>
-    <None Update="Program.cs" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Remove="Core/interfaces/TerminalGroup.cs" />
-  </ItemGroup>
 </Project>
