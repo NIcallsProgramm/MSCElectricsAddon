@@ -1,36 +1,57 @@
-
-using System.Drawing;
 namespace MSCElectrics;
+
 public class Wire
 {
-    const float MaxWear = 1f;
-    const float MinWear = 0f;
-    const float RCopper = 0.00175f; //удельное сопротивление материала
-    Terminal aJoint, bJoint; //точка входе и точkа выхода провода
-    public float Length{get;} //длина в метрах(м)
-    float d{get;}//диаметр
-    float Wear {get;} //коофициент износа провода
+    private const float RCopper = 0.00175f; // Удельное сопротивление материала.
+
+    private readonly Terminal aJoint;
+    private readonly Terminal bJoint;
+
+    public float Length { get; }
+    private float d { get; }
+    private float Wear { get; }
+
+    public bool IsWhole => Wear > 0f;
+
     public Wire(Terminal a, Terminal b, float length, float d)
     {
+        ArgumentNullException.ThrowIfNull(a);
+        ArgumentNullException.ThrowIfNull(b);
+
+        if (length < 0f)
+            throw new ArgumentOutOfRangeException(nameof(length));
+        if (d <= 0f)
+            throw new ArgumentOutOfRangeException(nameof(d));
+
         Length = length;
         this.d = d;
-        aJoint = a; bJoint = b;
-        Wear=1f;
+        aJoint = a;
+        bJoint = b;
+        Wear = 1f;
+
+        // Регистрируем провод на обеих клеммах, чтобы обход графа
+        // мог перейти с одной стороны провода на другую.
+        a.Attach(this);
+        b.Attach(this);
     }
-    float R //сопротивление всего провода
+
+    public Terminal? GetOtherTerminal(Terminal terminal)
     {
-        get{
-            float A =(MathF.PI * (d*d)) / 4; //площадь поперечного сечения
-            return RCopper *(Length / A) * Wear;
+        if (terminal == aJoint)
+            return bJoint;
+
+        if (terminal == bJoint)
+            return aJoint;
+
+        return null;
     }
-    }
-    bool IsWhole
+
+    public float Resistance
     {
-        get{
-            if(Wear > 0) return true;
-            else return false;
+        get
+        {
+            float area = MathF.PI * d * d / 4f;
+            return RCopper * (Length / area) * Wear;
         }
     }
-    
-    
 }
