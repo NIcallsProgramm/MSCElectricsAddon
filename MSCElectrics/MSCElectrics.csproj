@@ -11,5 +11,8 @@
   <ItemGroup>
     <None Update="Program.cs" CopyToOutputDirectory="PreserveNewest" />
     <Compile Remove="Core/interfaces/TerminalGroup.cs" />
+    <Reference Include="MiniEngine">
+      <HintPath>/storage/emulated/0/Documents/c#shell/MSCElectrics/MSCElectrics/MiniEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
